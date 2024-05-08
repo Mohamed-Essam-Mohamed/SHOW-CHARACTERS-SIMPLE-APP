@@ -1,6 +1,4 @@
-import 'package:bloc_test/src/controller/network_check.dart';
 import 'package:bloc_test/src/feature/no_internet/no_internet_screen.dart';
-import 'package:provider/provider.dart';
 
 import 'src/feature/character/view/character_details_screen.dart';
 import 'src/feature/character/view/character_screen.dart';
@@ -8,10 +6,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider<NetworkCheck>(
-      create: (context) => NetworkCheck(),
-      child: ShowCharactersApp(),
-    ),
+    ShowCharactersApp(),
   );
 }
 

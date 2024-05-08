@@ -1,4 +1,3 @@
-import 'package:bloc_test/src/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class NoInternetScreen extends StatelessWidget {
@@ -20,8 +19,8 @@ class NoInternetScreen extends StatelessWidget {
               const Text(
                 'Can\'t connect .. check internet',
                 style: TextStyle(
-                  fontSize: 22,
-                  color: AppColor.myGrey,
+                  fontSize: 17,
+                  color: Colors.grey,
                 ),
               ),
               Image.asset('assets/images/no_internet.png')

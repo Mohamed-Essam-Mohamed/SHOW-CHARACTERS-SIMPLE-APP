@@ -12,6 +12,7 @@ class AppApi {
   Future<Either<Failer, ResponseCharacter>> getAllCharacterDetails() async {
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
+
     if (connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.wifi)) {
       Uri url = Uri.https(baseUrl, characterDetailsScreen);

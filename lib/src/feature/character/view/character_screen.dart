@@ -1,13 +1,12 @@
 // ignore_for_file: unused_element, prefer_const_constructors
 
-import 'package:bloc_test/src/controller/network_check.dart';
 import 'package:bloc_test/src/feature/character/view/widget/character_item.dart';
 import 'package:bloc_test/src/feature/character/view_model/home_view_model_cubit.dart';
 import 'package:bloc_test/src/feature/no_internet/no_internet_screen.dart';
 import 'package:bloc_test/src/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 class CharacterScreen extends StatefulWidget {
   static const routeName = 'homeScreen';
@@ -54,23 +53,39 @@ class _CharacterScreenState extends State<CharacterScreen> {
             }
           } else if (state is HomeScreenLoaded) {
             allCharacters = state.characters.results!;
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 1,
-                childAspectRatio: 2 / 3,
-                mainAxisSpacing: 0,
-              ),
-              itemBuilder: (context, index) {
-                return CharacterItem(
-                  character: searchController!.text.isNotEmpty
-                      ? allCharactersSerch[index]
-                      : allCharacters[index],
-                );
+            return OfflineBuilder(
+              connectivityBuilder: (
+                BuildContext context,
+                ConnectivityResult connectivity,
+                Widget child,
+              ) {
+                final bool connected = connectivity != ConnectivityResult.none;
+
+                if (connected) {
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 1,
+                      childAspectRatio: 2 / 3,
+                      mainAxisSpacing: 0,
+                    ),
+                    itemBuilder: (context, index) {
+                      return CharacterItem(
+                        character: searchController!.text.isNotEmpty
+                            ? allCharactersSerch[index]
+                            : allCharacters[index],
+                      );
+                    },
+                    itemCount: searchController!.text.isNotEmpty
+                        ? allCharactersSerch.length
+                        : allCharacters.length,
+                  );
+                } else {
+                  return NoInternetScreen();
+                }
               },
-              itemCount: searchController!.text.isNotEmpty
-                  ? allCharactersSerch.length
-                  : allCharacters.length,
+              child: SizedBox.shrink(),
             );
           }
           return Container();
